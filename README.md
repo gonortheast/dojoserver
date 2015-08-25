@@ -1,15 +1,31 @@
-The dojo server implements a simple address-exchange server.
-A PUT request  to /address/:teamname with a body holding
-a JSON object of the form
+# dojoserver
+--
+The dojo server implements a simple address-exchange server. A POST request to
+/server?token=$teamtoken&url=$url will create a server instance that will be
+polled by the dojo server to find its message.
 
-	{
-		"Address": URL
-	}
+The address and status of a server can be retrieved with a GET request to
+/server/$teamnumber, where $teamnumber is the number of the team, derived from
+the team token. The response is JSON encoded in the form:
 
-will store a server address for the given team name.
+    struct {
+    	URL     string
+    	Status  string
+    }
 
-A GET request to /address/ will return an object containing
-all the addresses. A GET request to /address/:teamname will
-return the address for a given team name.
+where URL is the address of the server and Status is "ok" if the server is up
+and running and has a message and holds an error message otherwise.
 
-An entry can be deleted with a DELETE request to /address/:teamname.
+All the servers can be retrieved with a GET request to /server, JSON encoded in
+the form:
+
+    map[string] struct {
+    	URL     string
+    	Status  string
+    }
+
+where each entry in the map holds a server entry, keyed by its team number.
+
+A server entry can be deleted by sending a DELETE request to
+/server/$teamnumber?token=$teamtoken (the correct token for the team must be
+provided).

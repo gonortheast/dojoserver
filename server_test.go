@@ -55,7 +55,7 @@ func TestCRUD(t *testing.T) {
 
 	// Delete an entry.
 	t.Logf("delete an entry")
-	resp, err := http.DefaultClient.Do(newRequest("DELETE", srv.URL+"/server/11", ""))
+	resp, err := http.DefaultClient.Do(newRequest("DELETE", srv.URL+"/server/11?token="+tokens[11], ""))
 	if err != nil {
 		t.Fatalf("cannot do request: %v", err)
 	}
